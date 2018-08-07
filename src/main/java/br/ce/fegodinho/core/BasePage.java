@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.Select;
 
 public class BasePage {
 	
-/********* TextField e TextArea ************/	
+/********* TextField and TextArea ************/	
 
 	
 	public void escreve(By by, String texto) {
@@ -29,7 +29,7 @@ public class BasePage {
 		return getDriver().findElement(By.id(id_campo)).getAttribute("value");
 	}
 	
-	/********* Radio e Check ************/
+	/********* Radio and Check ************/
 	
 	public void clicarRadioButton (By by) {
 		getDriver().findElement(by).click();
@@ -108,8 +108,16 @@ public class BasePage {
 	
 	/********* Botao ************/
 	
+	public void clicarBotao(By by) {
+		getDriver().findElement(by).click();
+	}
+	
 	public void clicarBotao(String id) {
-		getDriver().findElement(By.id(id)).click();
+		clicarBotao(By.id(id));
+	}
+	
+	public void clicarBotaoPorTexto (String texto) {
+		clicarBotao(By.xpath("//button[.='"+texto+"']"));
 	}
 	
 	public String obterValueElemento(String id) {
@@ -122,7 +130,7 @@ public class BasePage {
 		getDriver().findElement(By.linkText(id)).click();
 	}
 	
-	/********* Textos ************/
+	/********* Text ************/
 	
 	public String obterTexto(By by) {
 		return getDriver().findElement(by).getText();
@@ -179,8 +187,8 @@ public class BasePage {
 		return js.executeScript(cmd, param);		
 	}
 
-/***************** Tabelas *******************/
-	public void clicarBotaoTabela(String colunaBusca, String valor, String colunaBotao, String idTabela) {
+/***************** Tables *******************/
+	public WebElement obterCelula(String colunaBusca, String valor, String colunaBotao, String idTabela) {
 		//procurar coluna do registro
 		WebElement tabela = getDriver().findElement(By.xpath("//*[@id='"+idTabela+"']"));
 		int idColuna = obterIndiceColuna(colunaBusca, tabela);
@@ -193,6 +201,11 @@ public class BasePage {
 		
 		//clicar no botao da celula encontrada
 		WebElement celula = tabela.findElement(By.xpath(".//tr["+idLinha+"]/td["+idColunaBotao+"]"));
+		return celula;
+	}
+	
+	public void clicarBotaoTabela(String colunaBusca, String valor, String colunaBotao, String idTabela) {
+		WebElement celula = obterCelula(colunaBusca, valor, colunaBotao, idTabela);
 		celula.findElement(By.xpath(".//input")).click();
 	}
 
